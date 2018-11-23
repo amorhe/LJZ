@@ -5,11 +5,11 @@
       <label for="input">
         <i class="iconfont icon-shouji01"></i>
       </label>
-      <input id="input" type="text" placeholder="请输入手机号">
+      <input id="input" type="text" placeholder="请输入手机号" v-model="phoneNUm">
     </form>
     <div class="codeDiv">
       <input type="text" class="codeInput">
-      <button class="getCode">获取验证码</button>
+      <button class="getCode" @click="getCodeClick">获取验证码</button>
       <!--<button class="reGet">重新获取60</button>-->
     </div>
   </div>
@@ -20,10 +20,25 @@
   export default {
     data(){
       return{
-        title:'绑定手机'
+        title:'绑定手机',
+        phoneNUm:''
       }
     },
-    components:{headers}
+    components:{headers},
+    methods:{
+      getCodeClick(){
+        this.$ajax({
+          method:'post',
+          url:'common/getMsgCode',
+          data:{
+            phone:this.phoneNUm,
+            type:'register'
+          }
+        }).then((res) => {
+          console.log(res)
+        })
+      }
+    }
   }
 </script>
 

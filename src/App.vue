@@ -110,5 +110,7 @@ export default {
   .slide-mid-active {
     transition: opacity .3s;
   }
+
+
 </style>
 
