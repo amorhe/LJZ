@@ -8,34 +8,67 @@
       <input id="input" type="text" placeholder="请输入手机号" v-model="phoneNUm">
     </form>
     <div class="codeDiv">
-      <input type="text" class="codeInput">
-      <button class="getCode" @click="getCodeClick">获取验证码</button>
-      <!--<button class="reGet">重新获取60</button>-->
+      <input type="text" class="codeInput" v-model="codeNum">
+      <button v-show="isCode==0" class="getCode" @click="getCodeClick">获取验证码</button>
+      <button :disabled="time==''?false:'disabled'" v-show="isCode==1&&codeNum==''" class="reGet" @click="getCodeClick">重新获取{{time}}</button>
+      <button v-show="codeNum.length>0" class="getCode" @click="login()">确认</button>
     </div>
   </div>
 </template>
 
 <script>
   import headers from '../../components/public/headers'
+  import qs from 'qs'
+  import { Toast } from 'mint-ui';
   export default {
     data(){
       return{
         title:'绑定手机',
-        phoneNUm:''
+        phoneNUm:'',
+        isCode:0,
+        time:3,
+        codeNum:''
       }
     },
-    components:{headers},
+    components:{
+      headers
+    },
     methods:{
       getCodeClick(){
-        this.$ajax({
-          method:'post',
-          url:'common/getMsgCode',
-          data:{
+        if(!this.phoneNUm ==''){
+          this.$ajax.post('common/getMsgCode', qs.stringify({
             phone:this.phoneNUm,
             type:'register'
+          })).then((res) => {
+            if(res.data.code==0){
+              this.isCode = 1;
+              this.timers((s) => {
+                if(s<10){
+                  s = `0${s}`
+                }
+                if(s<=0){
+                  s= '';
+                }
+                this.time = s;
+              })
+            }
+          }).catch((res) => {
+              console.log(res,'请求失败')
+            })
+        }else {
+          Toast('请输入手机号码')
+        }
+      },
+      login(){
+        this.$ajax.post('user/getLogin',qs.stringify({
+          phone:this.phoneNUm,
+          code:this.codeNum
+        })).then((res) => {
+          if(res.data.code==0){
+            
           }
-        }).then((res) => {
-          console.log(res)
+        }).catch((res) => {
+          console.log(res,'请求失败')
         })
       }
     }
