@@ -6,10 +6,10 @@
       <div class="center_box">
         <div class="center_box_up">
           <div>
-             <img src="http://img5.imgtn.bdimg.com/it/u=2830805145,74531996&fm=26&gp=0.jpg" alt="">
+             <img :src="info.headIcon">
              <div>
-               <p>漂流一生</p>
-               <p>青铜LV1</p>
+               <p>{{info.nickname}}</p>
+               <p>{{info.exValue}}</p>
              </div>
           </div>
           <button @click="goUserIndex">个人主页</button>
@@ -18,19 +18,19 @@
         <div class="center_box_down">
           <div>
             <p>5</p>
-            <p>状态</p>
+            <p>动态</p>
           </div>
           <router-link to="/myPurse">
-            <p>25</p>
+            <p>{{info.balance}}</p>
             <p>余额</p>
           </router-link>
           <div>
-            <p>1000</p>
+            <p>{{info.score}}</p>
             <p>灵钻</p>
           </div>
           <div>
-            <p>4</p>
-            <p>木偶</p>
+            <p>{{info.leavePaper}}</p>
+            <p>替身符</p>
           </div>
         </div>
       </div>
@@ -56,7 +56,10 @@
           <img src="http://img1.imgtn.bdimg.com/it/u=3125507027,1771900794&fm=26&gp=0.jpg" alt="">
           <p>邀请有礼</p>
         </div>
-        <p class="iconfont icon-next"></p>
+        <div>
+          <span class="fontSm">得替身符</span>
+          <p class="iconfont icon-next"></p>
+        </div>
       </router-link>
 
       <div class="center_list">
@@ -79,7 +82,7 @@
       <router-link class="center_list" to="/customService">
         <div>
           <img src="http://img4.imgtn.bdimg.com/it/u=2709349131,4385113&fm=26&gp=0.jpg" alt="">
-          <p>联系客服</p>
+          <p>客服&问题</p>
         </div>
         <p class="iconfont icon-next"></p>
       </router-link>
@@ -87,10 +90,13 @@
 </template>
 
 <script>
-    export default {
+  import {useInfo} from "../../http/user";
+
+  export default {
       data(){
         return {
-          index:''
+          index:'',
+          info:{}
         }
       },
       mounted(){
@@ -102,7 +108,15 @@
         },
         goSetting(){
           this.$router.push('/setting')
+        },
+        async getUser(){
+          let data = await useInfo();
+          console.log(data)
+          this.info = data.data
         }
+      },
+      created(){
+         this.getUser()
       }
     }
 </script>

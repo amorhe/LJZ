@@ -33,19 +33,19 @@
           tabClick(index) {
             switch (index) {
               case 0:
-                this.$router.push({path:'../plan'})
+                this.$router.push({path:'/'})
                     break;
               case 1:
-                this.$router.push({path:'../dynamic'})
+                this.$router.push({path:'/dynamic'})
                 break;
               case 2:
-                this.$router.push({path:'../invite'})
+                this.$router.push({path:'/invite'})
                 break;
             }
           },
           //去消息中心
           goMessage(){
-            this.$router.push({path:'../message'})
+            this.$router.push({path:'/message'})
           }
         }
     }

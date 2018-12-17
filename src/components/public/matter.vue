@@ -1,22 +1,23 @@
 <template>
     <div>
-      <div class="matter_box" v-for="item in 2" @click="goDetail">
-        <img class="matter_box_img" src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=3579570380,3354587210&fm=27&gp=0.jpg" alt="">
+      <div class="matter_box" v-for="(item,index) in list" @click="goDetail(item.id)" :key="index">
+        <img class="matter_box_img" :src="item.cover" alt="图片">
         <div class="matter_div">
           <div class="line-yellow"></div>
-          <h4>备战高考十大策略分析</h4>
+          <h4>{{item.title}}</h4>
         </div>
 
         <div class="matter_box_down">
-          <p>学习策略</p>
+          <p>{{item.author}}</p>
           <div class="matter_count">
             <div>
               <i class="iconfont icon-yanjing"></i>
-              <span>1455</span>
+              <span>{{item.lookCount}}</span>
             </div>
             <div>
-              <i class="iconfont icon-xin"></i>
-              <span>21</span>
+              <i v-if="item.IFLike==0" class="iconfont icon-xin"></i>
+              <i v-else class="iconfont icon-xin1 colorLike"></i>
+              <span>{{item.likeCount}}</span>
             </div>
             <i class="iconfont icon-iconfontfenxiang"></i>
           </div>
@@ -26,24 +27,63 @@
 </template>
 
 <script>
-    export default {
+  import {choiceList,list} from "../../http/zixun";
+
+  export default {
       data(){
         return {
-
+          list:[],
         }
       },
       props:{
         url:String
       },
       methods:{
-        goDetail(){
-          this.$router.push(this.url)
+        goDetail(id){
+          this.$router.push({path:this.url,query:{id:id}})
+        },
+        async getList(pageNum,pageSize){
+          let result = await list(pageNum,pageSize);
+          console.log(result)
+          this.list = result.data.list;
+          for (let i=0;i < result.data.list.length;i++){
+            let a = result.data.list[i].author;
+            switch (a) {
+              case '0':
+                this.list[i].author = '自律之路';
+                break;
+              case '1':
+                this.list[i].author = '学习策略';
+                break;
+              case '2':
+                this.list[i].author = '政策资讯';
+                break;
+              case '3':
+                this.list[i].author = '情感生活';
+                break;
+              case 4:
+                this.list[i].author = '学生天地';
+                break;
+              case 5:
+                this.list[i].author = '文化艺术';
+                break;
+              default:
+                this.list[i].author = '内部使用'
+            }
+          }
+
         }
+      },
+      created(){
+        this.getList(1,100)
       }
     }
 </script>
 
 <style scoped lang="less">
+  .colorLike {
+    color: #ff9800;
+  }
   .matter_box {
     width: 330px;
     height: 215px;

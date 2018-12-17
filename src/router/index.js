@@ -63,11 +63,6 @@ export default new Router({
       meta: { navShow: true, cname: '底部bannar',index:1 }
     },
     {
-      path: '/plan', //计划
-      component: plan,
-      meta: { navShow: true, cname: '底部bannar',index:1 }
-    },
-    {
       path: '/find', //发现
       component: find,
       meta: { navShow: true, cname: '底部bannar',index:1 }

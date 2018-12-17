@@ -14,12 +14,12 @@
            <span>资讯</span>
          </div>
        </router-link>
-       <router-link :to="{path:'/plan'}" v-if="$store.state.pageIndex==2">
+       <router-link :to="{path:'/'}" v-if="$store.state.pageIndex==2">
          <div>
            <i class="iconfont icon-jiahao add"></i>
          </div>
        </router-link>
-       <router-link :to="{path:'/plan'}" v-else>
+       <router-link :to="{path:'/'}" v-else>
          <div>
            <i class="iconfont icon-baxin"></i>
            <span>自律</span>

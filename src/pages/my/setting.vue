@@ -9,13 +9,16 @@
         <li>版本更新</li>
         <li>关于我们</li>
       </ul>
-      <button class="outLogin" @click="outLogins">退出登录</button>
+      <button class="outLogin" @click="outL">退出登录</button>
     </div>
 </template>
 
 <script>
   import headers from '../../components/public/headers'
-    export default {
+  import {doLoginOut} from "../../http/login"
+  import qs from 'qs'
+
+  export default {
       data(){
         return {
           title:'设置'
@@ -28,8 +31,15 @@
         binding(){
           this.$router.push('/binding')
         },
-        outLogins(){
-          this.$router.push('/loginWays')
+        async outLogins(token){
+          let res = await doLoginOut(qs.stringify(token));
+          if(res.code==0){
+            localStorage.removeItem('token')
+            this.$router.push('/loginWays');
+          }
+        },
+        outL(){
+          this.outLogins(localStorage.token)
         }
       }
     }

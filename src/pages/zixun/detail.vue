@@ -2,7 +2,7 @@
     <div class="zixunContent">
       <headers :title="title"></headers>
       <div class="zixunTop">
-        <h3>备战高考十大策略分析</h3>
+        <h3>{{dataObj.title}}</h3>
         <div class="zixunUser">
           <div>
             <img src="http://img2.imgtn.bdimg.com/it/u=764856423,3994964277&fm=26&gp=0.jpg" alt="">
@@ -32,12 +32,13 @@
               只因这夜色太迷人，只因这夜色太迷人,只因这夜色太迷人,我没能忍住尘世的诱惑，
               然而在哪里跌倒就在哪里爬起来，所以我还会回来的，谢谢哪里跌倒就在哪里爬起来，所以我还会回来的，谢谢所有鼓励我的人。</div>
             <div class="view_div_content_wrap">
-              <span>昨天 23:24</span>
+              <span>{{dataObj.taskTime}}</span>
               <div>
                 <span>回复</span>
                 <div>
-                  <i class="iconfont icon-xin"></i>
-                  <span>155</span>
+                  <i v-if="dataObj.IFLike==0" class="iconfont icon-xin"></i>
+                  <i v-else class="iconfont icon-xin1 colorLike"></i>
+                  <span>{{dataObj.likeCount}}</span>
                 </div>
               </div>
             </div>
@@ -70,7 +71,7 @@
           </p>
           <p>
             <i class="iconfont icon-xin"></i>
-            <span>155</span>
+            <span>{{dataObj.likeCount}}</span>
           </p>
           <i class="iconfont icon-iconfontfenxiang"></i>
         </div>
@@ -80,19 +81,35 @@
 
 <script>
   import headers from '../../components/public/headers'
-    export default {
+  import {detail} from "../../http/zixun";
+
+  export default {
       data(){
         return {
-          title:'学习策略'
+          title:'学习策略',
+          dataObj:{}
         }
       },
       components:{
         headers
+      },
+      methods:{
+        async getDetail(id){
+          let result = await detail(id);
+          console.log(result)
+          this.dataObj = result.data;
+        }
+      },
+      created(){
+        this.getDetail(this.$route.query.id)
       }
     }
 </script>
 
 <style scoped lang="less">
+  .colorLike {
+    color: #ff9800;
+  }
   .zixunContent {
     min-height: 100vh;
     background: #fff;

@@ -28,7 +28,8 @@
 
 <script>
   import matter from '../../components/public/matter'
-    export default {
+
+  export default {
       data(){
         return {
           istop:false,

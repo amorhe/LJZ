@@ -92,7 +92,9 @@
 
 <script>
   import headers from '../../components/public/top'
-    export default {
+  import {planList} from "../../http/plan";
+
+  export default {
       data(){
         return {
           num:0,
@@ -117,8 +119,15 @@
       //  官方计划详情
         addPlan(){
           this.$router.push('/makePlan/planRule')
+        },
+        async getList(pageNum,pageSize,type){
+          let result = await planList(pageNum,pageSize,type);
+          console.log(result)
         }
-      }
+      },
+    created(){
+        this.getList(1,1000,'综合')
+    }
     }
 </script>
 

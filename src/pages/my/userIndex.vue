@@ -4,22 +4,22 @@
       <div class="userTopDiv">
         <div class="userHead">
           <div>
-            <img class="avatar" src="http://img5.imgtn.bdimg.com/it/u=2830805145,74531996&fm=26&gp=0.jpg" alt="">
+            <img class="avatar" :src="info.headIcon" alt="">
             <div>
               <p>
-                <span>漂流一生</span>
+                <span>{{info.nickname}}</span>
                 <img class="sexImg" src="../../assets/nan.png" alt="">
               </p>
-              <span>青铜LV1</span>
+              <span>{{info.exValue}}</span>
             </div>
           </div>
           <p v-if="!isSx">编辑</p>
           <p v-else>关注</p>
         </div>
-        <p>个性签名：该同鞋比较洒脱，暂未留下签名</p>
+        <p>个性签名：{{info.slogan==''?'暂无':info.slogan}}</p>
         <p class="userSchool">
-          <span>高三文科·新昌中学</span>
-          <span>目标学校：南开大学</span>
+          <span>{{info.school==''?'暂无':info.school}}</span>
+          <span>目标学校：{{info.target==''?'暂无':info.target}}</span>
         </p>
       </div>
       <div class="userMidDiv">
@@ -87,19 +87,28 @@
 
 <script>
   import headers from '../../components/public/headers'
-    export default {
+  import {useInfo} from "../../http/user";
+
+  export default {
       data(){
         return {
           title:'个人主页',
           isSx:false,
-          backUrl:'/my'
+          backUrl:'/my',
+          info:{}
         }
       },
       components:{
         headers
       },
       methods:{
-
+        async getInfo(){
+          let result = await useInfo();
+          this.info = result.data;
+        }
+      },
+      created(){
+          this.getInfo();
       }
     }
 </script>
@@ -194,7 +203,6 @@
       padding: 21px 0 29px 21px;
       display: flex;
       justify-content: space-between;
-      height: 123px;
       .user_lf {
         width: 176px;
         display: flex;
