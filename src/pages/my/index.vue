@@ -6,7 +6,7 @@
       <div class="center_box">
         <div class="center_box_up">
           <div>
-             <img :src="info.headIcon">
+             <img :src="info.headIcon" alt="图片">
              <div>
                <p>{{info.nickname}}</p>
                <p>{{info.exValue}}</p>

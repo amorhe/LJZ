@@ -4,7 +4,7 @@
       <div class="userTopDiv">
         <div class="userHead">
           <div>
-            <img class="avatar" :src="info.headIcon" alt="">
+            <img class="avatar" :src="info.headIcon" alt="图片">
             <div>
               <p>
                 <span>{{info.nickname}}</span>

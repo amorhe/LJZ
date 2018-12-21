@@ -11,4 +11,16 @@ export const list = (pageNum,pageSize) => ajax(BASE_URL + 'article/newsList',{pa
 
 
 //资讯详情
-export const detail = (id) => ajax(BASE_URL + 'article/newsDetail',{id})
+export const detail = (id) => ajax(BASE_URL + 'article/newsDetail',{id});
+
+
+//资讯评论列表
+export const dynamicList = (aId) => ajax(BASE_URL + 'article/newsCommentList',{aId});
+
+//资讯点赞|取消点赞
+export const newsLike = (aId) => ajax(BASE_URL + 'article/newsLike',{aId});
+
+
+//资讯评论点赞|取消点赞
+export const newsCommentLike = (acId) => ajax(BASE_URL + 'article/newsCommentLike',{acId});
+

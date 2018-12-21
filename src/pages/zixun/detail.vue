@@ -5,21 +5,21 @@
         <h3>{{dataObj.title}}</h3>
         <div class="zixunUser">
           <div>
-            <img src="http://img2.imgtn.bdimg.com/it/u=764856423,3994964277&fm=26&gp=0.jpg" alt="">
-            <span>火花是好还是坏</span>
+            <img :src="dataObj.authorHeadIcon" alt="图片">
+            <span>{{dataObj.authorNickname}}</span>
           </div>
           <p>关注</p>
         </div>
       </div>
-
-      <ul class="view_div_list">
-        <li>
+      <div v-html="dataObj.content"></div>
+      <ul class="view_div_list" v-if="dynamicArr.length>0">
+        <li v-for="(item,i) in dynamicArr.slice(0,2)" :key="i">
           <div>
             <div class="view_div_user">
-              <img src="http://img2.imgtn.bdimg.com/it/u=764856423,3994964277&fm=26&gp=0.jpg" alt="">
+              <img :src="item.headIcon" alt="图片">
               <div>
-                <p>火花是好还</p>
-                <p class="colorY fontSm">青铜LV1</p>
+                <p>{{item.nickname}}</p>
+                <p class="colorY fontSm">{{item.exValue}}</p>
               </div>
             </div>
             <p class="sixin">
@@ -28,49 +28,49 @@
             </p>
           </div>
           <div class="view_div_content">
-            <div class="view_div_text">只因这夜色太迷人然而在哪里跌倒就在哪里爬起来,
-              只因这夜色太迷人，只因这夜色太迷人,只因这夜色太迷人,我没能忍住尘世的诱惑，
-              然而在哪里跌倒就在哪里爬起来，所以我还会回来的，谢谢哪里跌倒就在哪里爬起来，所以我还会回来的，谢谢所有鼓励我的人。</div>
+            <div class="view_div_text">{{item.content}}</div>
             <div class="view_div_content_wrap">
-              <span>{{dataObj.taskTime}}</span>
+              <span>{{item.createTime}}</span>
               <div>
                 <span>回复</span>
                 <div>
-                  <i v-if="dataObj.IFLike==0" class="iconfont icon-xin"></i>
-                  <i v-else class="iconfont icon-xin1 colorLike"></i>
-                  <span>{{dataObj.likeCount}}</span>
+                  <i v-if="item.IFLike==0" class="iconfont icon-xin" @click="newsCommontLikeDefalut(item.userId)"></i>
+                  <i v-if="item.IFLike==1" class="iconfont icon-xin1 colorLike" @click="newsCommontLikeDefalut(item.userId)"></i>
+                  <span>{{item.supportNum}}</span>
                 </div>
               </div>
             </div>
           </div>
           <div class="view_div_bottom">
-            <div>
+            <div v-for="(v,index) in item.replyList" :key="index">
               <div>
                 <div>
-                  <img src="http://img2.imgtn.bdimg.com/it/u=764856423,3994964277&fm=26&gp=0.jpg" alt="">
-                  <p>火花是好还是坏</p>
+                  <img :src="v.headIcon" alt="图片">
+                  <p>{{v.otherNickname}}</p>
                 </div>
-                <p class="colorY">青铜LV5</p>
+                <p class="colorY">{{v.exValue}}</p>
               </div>
-              <p>今天背诵单词成果35个,态度决定一切,消极对待的注重基础知识当你看到这里的时候。</p>
+              <p>{{v.content}}</p>
             </div>
             <p class="moreP">
-              <span>更多23条回复</span>
+              <span>更多{{item.replyList.length}}条回复</span>
               <i class="iconfont icon-next"></i>
             </p>
           </div>
         </li>
       </ul>
+      <ul class="view_kong" v-else>暂无评论...</ul>
 
       <div class="discuss_foot">
         <input type="text" placeholder="写点什么吧">
         <div>
           <p>
             <i class="iconfont icon-weibiaoti-"></i>
-            <span>155</span>
+            <span>{{dataObj.commentCount}}</span>
           </p>
           <p>
-            <i class="iconfont icon-xin"></i>
+            <i class="iconfont icon-xin" v-if="dataObj.IFLike==0" @click="newsLikeDefalut($route.query.id)"></i>
+            <i class="iconfont icon-xin1 colorLike" v-if="dataObj.IFLike==1" @click="cancelnewsLike($route.query.id)"></i>
             <span>{{dataObj.likeCount}}</span>
           </p>
           <i class="iconfont icon-iconfontfenxiang"></i>
@@ -81,32 +81,58 @@
 
 <script>
   import headers from '../../components/public/headers'
-  import {detail} from "../../http/zixun";
+  import {detail,dynamicList,newsLike,newsCommentLike} from "../../http/zixun"
 
   export default {
       data(){
         return {
           title:'学习策略',
-          dataObj:{}
+          dataObj:{},
+          dynamicArr:[]
         }
       },
       components:{
         headers
       },
       methods:{
+        //资讯详情
         async getDetail(id){
           let result = await detail(id);
-          console.log(result)
           this.dataObj = result.data;
+        },
+        //资讯评论列表
+        async getDynamicList(aId){
+          let result = await dynamicList(aId);
+          this.dynamicArr = result.data.list;
+        },
+        //资讯点赞
+        async newsLikeDefalut(aId){
+          let data = await newsLike(aId);
+          this.dataObj.IFLike = 1;
+          this.dataObj.likeCount ++;
+        },
+        //取消点赞
+        async cancelnewsLike(aId){
+          let data = await newsLike(aId);
+          this.dataObj.IFLike = 0;
+          this.dataObj.likeCount --;
+        },
+        async newsCommontLikeDefalut(acId){
+          let data = await newsCommentLike(acId);
         }
       },
       created(){
-        this.getDetail(this.$route.query.id)
+        this.getDetail(this.$route.query.id);
+        this.getDynamicList(this.$route.query.id)
       }
     }
 </script>
 
 <style scoped lang="less">
+  .view_kong {
+    width: 100vw;
+    margin-top: 10px;
+  }
   .colorLike {
     color: #ff9800;
   }

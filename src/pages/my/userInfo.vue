@@ -4,7 +4,7 @@
       <div class="info_top">
         <span class="fontWeight">头像设置</span>
         <div>
-          <img class="avatar" :src="info.headIcon">
+          <img class="avatar" :src="info.headIcon" alt="图片">
         </div>
       </div>
       <p class="userNature">

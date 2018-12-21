@@ -44,7 +44,6 @@
         },
         async getList(pageNum,pageSize){
           let result = await list(pageNum,pageSize);
-          console.log(result)
           this.list = result.data.list;
           for (let i=0;i < result.data.list.length;i++){
             let a = result.data.list[i].author;

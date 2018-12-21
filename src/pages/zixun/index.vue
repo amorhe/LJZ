@@ -28,7 +28,6 @@
 
 <script>
   import matter from '../../components/public/matter'
-
   export default {
       data(){
         return {
